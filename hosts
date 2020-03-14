@@ -1,0 +1,16 @@
+[linux]
+linux1.hostname.com
+linux2.hostname.com
+linux3.hostname.com
+
+[windows]
+win1.hostname.com
+win2.hostname.com
+win3.hostname.com
+
+
+[windows:vars]
+ansible_user=Test
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore
+

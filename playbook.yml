@@ -1,0 +1,89 @@
+---
+- name: Host monitor service playbook
+  hosts: linux
+  become: yes
+  remote_user: "{{linux_user}}"
+
+  tasks:
+    - name: Install python3
+      yum:
+        name:
+          - python3
+        state: latest
+
+    - name: Copy process.py to destination
+      copy:
+        src: process.py
+        dest: /app/
+        owner: "{{linux_user}}"
+        group: "{{linux_user}}"
+        mode: '0777'
+
+    - name: Copy "{{linux_service_name}}" to destination
+      copy:
+        src: "{{linux_service_name}}"
+        dest: "/lib/systemd/system/{{linux_service_name}}"
+        mode: preserve
+
+    - name: Daemon reload
+      systemd:
+        daemon_reload: yes
+
+    - name: Enable service to run on boot
+      systemd:
+        name: "{{linux_service_name}}"
+        enabled: yes
+
+    - name: Start service "{{linux_service_name}}"
+      systemd:
+        name: "{{linux_service_name}}"
+        state: restarted
+
+- name: Host monitor service playbook for Windows
+  hosts: windows
+
+  tasks:
+  - name: Create folder for process
+    win_file:
+      path: "{{win_service_folder}}"
+      state: directory
+
+  - name: Copy python script
+    win_copy:
+      dest: "{{win_service_folder}}\\"
+      src: process.py
+
+  - name: Install nssm & python3 via chocolatey
+    win_chocolatey:
+      name:
+        - nssm
+        - python3
+
+  - name: Stop the service if already present
+    win_service:
+      name: "{{win_service_name}}"
+      state: stopped
+    ignore_errors: yes
+
+  - name: Delete the service if already present
+    win_service:
+      name: "{{win_service_name}}"
+      state: absent
+    ignore_errors: yes
+
+  - name: Install "{{win_service_name}}" service
+    win_nssm:
+      name: "{{win_service_name}}"
+      application: C:\Python38\pythonw.exe
+      arguments: "{{win_service_folder}}\\process.py"
+
+  - name: Start "{{win_service_name}}" service
+    win_service:
+      name: "{{win_service_name}}"
+      state: started
+    register: win_service_result
+    until: win_service_result.state == "running"
+    retries: 2
+    delay: 10
+
+

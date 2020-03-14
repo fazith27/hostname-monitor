@@ -1,0 +1,14 @@
+[Unit]
+Description=Hostname Monitor Service
+
+[Service]
+User=ec2-user
+Type=simple
+ExecStart=/usr/bin/python3 /app/process.py &
+Restart=always
+RestartSec=60
+StartLimitInterval=400
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target
