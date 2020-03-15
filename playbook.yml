@@ -14,7 +14,7 @@
     - name: Copy process.py to destination
       copy:
         src: process.py
-        dest: /app/
+        dest: "/app/"
         owner: "{{linux_user}}"
         group: "{{linux_user}}"
         mode: '0777'
@@ -37,7 +37,7 @@
     - name: Start service "{{linux_service_name}}"
       systemd:
         name: "{{linux_service_name}}"
-        state: restarted
+        state: started
 
 - name: Host monitor service playbook for Windows
   hosts: windows
@@ -45,12 +45,12 @@
   tasks:
   - name: Create folder for process
     win_file:
-      path: "{{win_service_folder}}"
+      path: C:\Process
       state: directory
 
   - name: Copy python script
     win_copy:
-      dest: "{{win_service_folder}}\\"
+      dest: C:\Process\
       src: process.py
 
   - name: Install nssm & python3 via chocolatey
@@ -75,7 +75,7 @@
     win_nssm:
       name: "{{win_service_name}}"
       application: C:\Python38\pythonw.exe
-      arguments: "{{win_service_folder}}\\process.py"
+      arguments: C:\Process\process.py"
 
   - name: Start "{{win_service_name}}" service
     win_service:

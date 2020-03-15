@@ -5,7 +5,7 @@ import platform
 
 def main():
     frequency=5
-    logfilepath='C:\Process\process.log'
+    logfilepath = 'C:\Process\process.log'
     if platform.system() == 'Linux':
         logfilepath = '/app/process.log'
     logging.basicConfig(filename=logfilepath, level=logging.INFO, format='[%(asctime)s] %(message)s', datefmt='%d/%m/%Y %I:%M:%S %p')

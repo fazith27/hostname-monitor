@@ -2,7 +2,7 @@
 This project showing how to provision, deploy and run script as service on both Linux and Windows.
 ##
 ## File Details
-* _.gitignore_ - Git ignore file. Hope you know.
+* _.gitignore_ - Git ignore file.
 * _ansible.cfg_ - Ansible configuration to configure the inventory details
 * _host-monitor.service_ - Linux based service file for configuring the service
 * _hosts_ - Inventory file for Ansible to have the server details where the service will be deployed
@@ -49,23 +49,14 @@ Parameter type: Credentials parameter, Parameter Name: git_credential, Paramater
 Parameter type: Choice/String parameter, Parameter Name: git_branch, Paramater Value: <Branch of git repo>; // master
 Parameter type: Choice/String parameter, Parameter Name: git_repo_url, Paramater Value: <Clone URL of git repo>;
 
-Linux target parameters:
-***********************
-Parameter type: String parameter, Parameter Name: linux_user, Paramater Value: <Linux user from target server>; // ec2-user
-Parameter type: String parameter, Parameter Name: linux_service_name, Paramater Value: <service name to be created on linux target>; // host-monitor.service
-
-Windows target parameters:
-***********************
-Parameter type: String parameter, Parameter Name: win_service_folder, Paramater Value: <directory from linux to copy the script file and log file>; // C:\Process
-Parameter type: String parameter, Parameter Name: win_service_name, Paramater Value: <service name to be created on windows target>; // Hostname Monitor
 ```
 #### Ansible
 * No seperate configuration for Ansible as we covered it in above section.
 
-#### Linux Target
+#### Linux Targets
 *  No seperate configs but esnure the SSH connectivity from Jenkins
  
-#### Windows Target
+#### Windows Targets
 * Create new user name and password with Admin rights which will be used to connect by ansible to connect and run playbook.
 * Configure WinRM if not already done. Details on how to configure is available in https://docs.ansible.com/ansible/latest/user_guide/windows_setup.html#winrm-setup.
 
@@ -76,7 +67,11 @@ Parameter type: String parameter, Parameter Name: win_service_name, Paramater Va
 Once done push it to repo and configure it to consumed by Jenkins pipeline to read the file `Jenkinsfile`.
 Ensure the other parameter values are also given if default value are not set for those.
 
-## Assumption
-* User details for bot linux and windows hosts are already configured.
+## Assumption/Key Details
+* User/SSH details for bot linux and windows hosts are already configured.
 * Linux user used here is `ec2-user`
 * Windows user used here is `Test`
+* Script and log will be available in `/app/` for Linux targets
+* Script and log will be available in `C:\Process\` for Linux targets
+* Linux service name `host-monitor.service`
+* Windows service name `Hostname Monitor`
