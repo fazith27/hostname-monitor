@@ -41,13 +41,11 @@ Github -> Jenkins (on linux) -> Ansible (linux) -> Target (Windows/Linux Server)
 * Configure the pipeline to have listed parameters to be passed on each build.
 * Install WinRM which is used by Ansible for connecting to Windows. You can use `sudo pip3 install pywinrm` for linux host.
 ``` 
-Parameter Name: host, Paramater Value: windows/linux; // This is deciding which target the pipeline should be executed. It can be either windows or linux, but not both.
-
-Common parameters:
-*****************
-Parameter type: Credentials parameter, Parameter Name: git_credential, Paramater Value: <User name and password of git repo>;
-Parameter type: Choice/String parameter, Parameter Name: git_branch, Paramater Value: <Branch of git repo>; // master
-Parameter type: Choice/String parameter, Parameter Name: git_repo_url, Paramater Value: <Clone URL of git repo>;
+Parameter type: Choice, Parameter Name: host, Paramater Value: ['linux','windows']; // This is deciding which target the pipeline should be executed. It can be either windows or linux, but not both.
+Parameter type: Credentials, Parameter Name: git_credential, Paramater Value: <User name and password of git repo>; // Configured it in Jenkins
+Parameter type: String, Parameter Name: git_branch, Paramater Value: <Branch of git repo>; // master
+Parameter type: String, Parameter Name: git_repo_url, Paramater Value: <Clone URL of git repo>;
+Parameter type: Text, Parameter Name: host_details, Paramater Value: <[linux]\nlinux1.com\nlinux2.com \nOR\n [windows]\nwin1.com\nwin2.com>;
 
 ```
 #### Ansible
